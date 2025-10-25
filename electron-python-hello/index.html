@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h2>Hello from Electron!</h2>
+      <button id="btn">Say Hello (Python)</button>
+      <p id="result"></p>
+    </div>
+
+    <script>
+      document.getElementById("btn").addEventListener("click", async () => {
+        const res = await fetch("http://127.0.0.1:5000/hello");
+        const data = await res.json();
+        document.getElementById("result").textContent = data.message;
+      });
+    </script>
+  </body>
+</html>
