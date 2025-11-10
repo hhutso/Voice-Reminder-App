@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from '../styles/style';
+import {useRecorder} from './components/record';
 
 type Reminder = {
   id: number;
@@ -9,6 +10,7 @@ type Reminder = {
 };
 
 export default function Index() {
+  const { isRecording, recordingUri, startRecording, stopRecording} = useRecorder();
   const reminders: Reminder[] = [
     { id: 1, title: 'Interview', date: '23 May, 2024 02:00PM' },
     { id: 2, title: 'Birthday', date: '13 April, 2024 12:00AM' },
@@ -21,8 +23,13 @@ export default function Index() {
       </View>
 
       <View style={styles.newReminderContainer}>
-        <TouchableOpacity style={styles.recordButton}>
-          <Text style={styles.recordButtonText}>Click to Start Recording</Text>
+        <TouchableOpacity 
+          style={styles.recordButton}
+          onPress={isRecording ? stopRecording : startRecording}
+        >
+          <Text style= {styles.recordButtonText}>
+            {isRecording ? 'Stop Recording' : 'Click to Start Recording'}
+          </Text>
         </TouchableOpacity>
       </View>
 
