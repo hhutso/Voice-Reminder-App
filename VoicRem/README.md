@@ -54,3 +54,4 @@ Join our community of developers creating universal apps.
 extra installs 
 
 npm install react-native-swipe-list-view
+npx expo install expo-audio
