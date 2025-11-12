@@ -1,35 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from '../styles/style';
+import {useRecorder} from './utils/record';
+import {usePlayback} from './utils/playhelper';
+import { formatDateTime } from './utils/datehelper';
 
 type Reminder = {
   id: number;
   title: string;
-  date: number;
+  date: string;
 };
 
-const reminderCreator = () => {
-  const [items, setItems] = useState([]); // state to hold the list of items
-  const[itemCount, setItemCount] = useState(0); // unique keys to items 
-}
-
 export default function Index() {
-  const [reminders, setReminders] = useState<Reminder[]>([
-    {id: 1, title: 'Test1', date: 2025},
-  ]);
-
-  const handleAddReminder = () => {
-    // add a new reminder
-    // TODO: add recording feature
-    const newReminder: Reminder = {
-      id: Date.now(),
-      title: 'New Reminder',
-      date: Date.now(),
-    }
-
-    setReminders(currentReminders => [...currentReminders, newReminder]);
-  };
-
+  const reminders: Reminder[] = [
+    { id: 1, title: 'Interview', date: '23 May, 2024 02:00PM' },
+    { id: 2, title: 'Birthday', date: '13 April, 2024 12:00AM' },
+  ];
 
   return (
     <View style={styles.container}>
@@ -38,9 +24,8 @@ export default function Index() {
       </View>
 
       <View style={styles.newReminderContainer}>
-        <TouchableOpacity style={styles.recordButton} onPress={handleAddReminder}>
+        <TouchableOpacity style={styles.recordButton}>
           <Text style={styles.recordButtonText}>Click to Start Recording</Text>
-          
         </TouchableOpacity>
       </View>
 
@@ -52,10 +37,10 @@ export default function Index() {
           <View style={styles.reminderCard}>
             <View>
               <Text style={styles.reminderTitle}>{item.title}</Text>
-              <Text style={styles.reminderDate}>{item.date}</Text>
+              <Text style={styles.reminderDate}>{formatDateTime(new Date (item.date))}</Text>
             </View>
-            <TouchableOpacity style={styles.playButton}>
-              <Text style={styles.playIcon}>▶</Text>
+            <TouchableOpacity style={styles.playButton} onPress={() => handlePlayback(item.audioUri)}>
+              <Text style={styles.playIcon}>{playing ? '| |' : '▶'}</Text>
             </TouchableOpacity>
           </View>
         )}
