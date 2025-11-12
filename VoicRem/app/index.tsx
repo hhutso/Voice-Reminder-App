@@ -9,7 +9,7 @@ type Reminder = {
   id: number;
   title: string;
   date: number;
-  audioUri?: string | null | undefined;
+  audioUri: string | null;
 };
 
 const reminderCreator = () => {
@@ -51,7 +51,7 @@ export default function Index() {
     }
   }
 
-  const handlePlayback = (uri: string | null | undefined) => {
+  const handlePlayback = (uri: string | null) => {
     if (!uri){
       console.log("no uri found for playback");
       return;
@@ -101,7 +101,7 @@ export default function Index() {
               <Text style={styles.reminderDate}>{formatDateTime(new Date (item.date))}</Text>
             </View>
             <TouchableOpacity style={styles.playButton} onPress={() => handlePlayback(item.audioUri)}>
-              <Text style={styles.playIcon}>{playing ? '⏸' : '▶'}</Text>
+              <Text style={styles.playIcon}>{playing ? '| |' : '▶'}</Text>
             </TouchableOpacity>
           </View>
         )}
