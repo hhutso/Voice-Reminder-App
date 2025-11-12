@@ -90,5 +90,6 @@ export const styles = StyleSheet.create({
   playIcon: {
     color: colors.textLight,
     fontSize: 18,
+    fontWeight: '900',
   },
 });
