@@ -1,20 +1,18 @@
 //Function to access System Microphone and Record
 import { useState, useEffect } from 'react';
+import { File, Directory, Paths } from 'expo-file-system';
 import {
   useAudioRecorder,
   useAudioRecorderState,
   AudioModule,
   RecordingPresets,
   setAudioModeAsync,
-  useAudioPlayer,
 } from 'expo-audio';
 
 export function useRecorder() {
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const recorderState = useAudioRecorderState(recorder);
-  const audioPlayer = useAudioPlayer();
   const [recordingUri, setRecordingUri] = useState<string | null>(null);
-  const [playingId, setPlayingId] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -28,6 +26,7 @@ export function useRecorder() {
       });
     })();
   }, []);
+
 
   const startRecording = async () => {
     try {
@@ -43,29 +42,36 @@ export function useRecorder() {
 
   const stopRecording = async (): Promise<string | null> => {
     try {
-      const result = await recorder.stop();
+      await recorder.stop();
       console.log("Recording Stopped");
-
       const uri = recorder.uri;
 
-      if (uri){
-        console.log("recording saved at: ", uri);
-        setRecordingUri(uri);
-        return uri;
-      }
-      
-      else {
+      if (uri) {
+        const savedUri = await saveRecording(uri);
+        setRecordingUri(savedUri); // Update state
+        console.log("recording saved at: ", savedUri);
+        return savedUri;
+      } else {
         console.log("No uri found");
         return null;
       }
-    }
-
-    catch (error){
+    } 
+    catch (error) {
       console.error('error stopped recording:', error);
       return null;
     }
   };
 
+  const saveRecording = async (recordingUri: string) => {
+    const fileName = `recording-${Date.now()}.m4a`;
+    const documentDir = new Directory(Paths.document);
+    const destinationFile = new File (documentDir, fileName);
+  
+    const sourceFile = new File(recordingUri);
+    await sourceFile.move(destinationFile);
+
+    return destinationFile.uri;
+  };
 
   return {
     isRecording: recorderState.isRecording,

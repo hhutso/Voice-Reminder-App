@@ -53,6 +53,8 @@ export default function Index() {
       return;
     }
 
+    console.log("playback pressed for uri:", uri);
+
     if(activeUri === uri){
       if (playing){
         pause();
@@ -65,7 +67,7 @@ export default function Index() {
     else {
       pause();
       setActiveUri(uri);
-      play();
+      //play();
     }
   }
   // DELETE REMINDER FUNCTIONALITY
@@ -110,7 +112,7 @@ export default function Index() {
                 <Text style={styles.reminderDate}>{formatDateTime(new Date (item.date))}</Text>
               </View>
               <TouchableOpacity style={styles.playButton} onPress={() => handlePlayback(item.audioUri)}>
-                <Text style={styles.playIcon}>{playing ? '| |' : '▶'}</Text>
+                <Text style={styles.playIcon}>{activeUri === item.audioUri && playing ? '| |' : '▶'}</Text>
               </TouchableOpacity>
             </View>
           </Swipeable>

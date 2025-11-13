@@ -1,4 +1,4 @@
-import { useAudioPlayer, useAudioPlayerStatus, setAudioModeAsync} from 'expo-audio';
+import { useAudioPlayer, useAudioPlayerStatus} from 'expo-audio';
 import { useEffect, useState } from 'react';
 
 export function usePlayback(uri: string | null){
@@ -33,6 +33,7 @@ export function usePlayback(uri: string | null){
             if (status.didJustFinish){
                 player.seekTo(0);
             }
+            player.volume = 1.0;
             player.play();
         }
         else{
