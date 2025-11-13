@@ -1,4 +1,4 @@
-export  const formatDateTime = (date: Date = new Date()): string => {
+export const formatDateTime = (date: Date = new Date()): string => {
     return date
         .toLocaleString('en-US',  {
             month: '2-digit',
