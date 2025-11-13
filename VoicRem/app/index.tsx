@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View, } from 'react-native';
+import { GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
 import { styles } from '../styles/style';
 import {useRecorder} from './utils/record';
 import {usePlayback} from './utils/playhelper';
@@ -12,11 +13,6 @@ type Reminder = {
   date: number;
   audioUri: string | null;
 };
-
-const reminderCreator = () => {
-  const [items, setItems] = useState([]); //state to hold the list of items
-  const[itemCount, setItemCount] = useState(0); //unique keys to items
-}
 
 export default function Index() {
   const { isRecording, recordingUri, startRecording, stopRecording} = useRecorder();
@@ -35,7 +31,6 @@ export default function Index() {
       title: 'New Reminder',
       date: Date.now(),
       audioUri: uri,
-
     }
 
     setReminders(currentReminders => [...currentReminders, newReminder]);
@@ -75,8 +70,20 @@ export default function Index() {
       //play();
     }
   }
+  // DELETE REMINDER FUNCTIONALITY
+  const handleDeleteSwipeReminder = (id: number) => {
+    setReminders(currentReminders => currentReminders.filter(reminder => reminder.id !== id));
+  };
+  const renderRightActions = (id: number) => {
+    return (
+      <RectButton style={styles.deleteButton} onPress={() => handleDeleteSwipeReminder(id)}>
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </RectButton>
+    );
+  };
 
   return (
+    <GestureHandlerRootView style={{flex: 1}}>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Welcome to Voice Reminders</Text>
@@ -98,18 +105,20 @@ export default function Index() {
         data={reminders}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.reminderCard}>
-            <View>
-              <Text style={styles.reminderTitle}>{item.title}</Text>
-              <Text style={styles.reminderDate}>{formatDateTime(new Date (item.date))}</Text>
+          <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+            <View style={styles.reminderCard}>
+              <View>
+                <Text style={styles.reminderTitle}>{item.title}</Text>
+                <Text style={styles.reminderDate}>{formatDateTime(new Date (item.date))}</Text>
+              </View>
+              <TouchableOpacity style={styles.playButton} onPress={() => handlePlayback(item.audioUri)}>
+                <Text style={styles.playIcon}>{playing ? '| |' : '▶'}</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.playButton} onPress={() => handlePlayback(item.audioUri)}>
-              <Text style={styles.playIcon}>{activeUri === item.audioUri && playing ? '| |' : '▶'}</Text>
-            </TouchableOpacity>
-          </View>
+          </Swipeable>
         )}
       />
     </View>
+    </GestureHandlerRootView>
   );
 }
-
