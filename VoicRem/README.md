@@ -51,7 +51,10 @@ Join our community of developers creating universal apps.
 
 
 
-extra installs 
+## extra installs 
 
 npm install react-native-swipe-list-view
+
 npx expo install expo-audio
+
+npx expo install react-native-gesture-handler react-native-reanimated
