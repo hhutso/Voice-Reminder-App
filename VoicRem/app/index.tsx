@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { FlatList, Text, TouchableOpacity, View, } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View, TextInput, } from 'react-native';
 import { GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
 import { styles } from '../styles/style';
 import {useRecorder} from './utils/record';
 import {usePlayback} from './utils/playhelper';
 import { formatDateTime } from './utils/datehelper';
+// import { NAMEOFFUNC } from './components/editReminder';
 
 //hi
 type Reminder = {
@@ -70,6 +71,11 @@ export default function Index() {
       //play();
     }
   }
+
+  // edit the title 
+  const[editingId, setEditingId] = useState<number | null>(null);
+  const [editingTitle, setEditingTitle] = useState<string>('');
+
   // DELETE REMINDER FUNCTIONALITY
   const handleDeleteSwipeReminder = (id: number) => {
     setReminders(currentReminders => currentReminders.filter(reminder => reminder.id !== id));
@@ -82,6 +88,32 @@ export default function Index() {
     );
   };
 
+  // EDIT REMINDER FUNCTIONALITY
+  const handleEditSwipeReminder = (id: number) => {
+    const reminder = reminders.find(r => r.id === id);
+    if (!reminder) return;
+    setEditingId(id);
+    setEditingTitle(reminder.title);
+  };
+  const renderLeftActions = (id: number) => {
+    return (
+      <RectButton style={styles.editButton} onPress={() => handleEditSwipeReminder(id)}>
+        <Text style={styles.editButtonText}>Edit</Text>
+      </RectButton>
+    );
+  };
+
+  const saveEditedReminder = () => {
+    setReminders(prev =>
+      prev.map(r =>
+        r.id === editingId ? { ...r, title: editingTitle} : r
+      )
+    );
+    setEditingId(null);
+    setEditingTitle("");
+  };
+
+  
   return (
     <GestureHandlerRootView style={{flex: 1}}>
     <View style={styles.container}>
@@ -105,10 +137,25 @@ export default function Index() {
         data={reminders}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+          <Swipeable 
+            renderRightActions={() => renderRightActions(item.id)}
+            renderLeftActions={() => renderLeftActions(item.id)}
+          >
             <View style={styles.reminderCard}>
               <View>
-                <Text style={styles.reminderTitle}>{item.title}</Text>
+                {/* <Text style={styles.reminderTitle}>{item.title}</Text> */}
+                {editingId === item.id ? (
+                  <TextInput
+                    style={styles.reminderTitleInput}
+                    value={editingTitle}
+                    onChangeText={setEditingTitle}  
+                    autoFocus={true}           // 🔥 pops open keyboard immediately
+                    onSubmitEditing={saveEditedReminder} // press enter to save
+                    returnKeyType="done"
+                  />
+                ) : (
+                  <Text style={styles.reminderTitle}>{item.title}</Text>
+                )}
                 <Text style={styles.reminderDate}>{formatDateTime(new Date (item.date))}</Text>
               </View>
               <TouchableOpacity style={styles.playButton} onPress={() => handlePlayback(item.audioUri)}>

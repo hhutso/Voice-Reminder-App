@@ -105,4 +105,25 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
   },
+  editButton: {
+    backgroundColor: '#007AFF',
+    justifyContent: 'center', 
+    alignItems: 'flex-start',
+    paddingHorizontal: 10,
+    borderRadius: 10, 
+    height: '80%',
+  },
+  editButtonText: {
+    color: colors.textLight,  
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  reminderTitleInput: {
+  fontSize: 18,
+  fontWeight: "bold",
+  borderBottomWidth: 1,
+  borderColor: "#ccc",
+  paddingVertical: 2,
+},
+
 });
