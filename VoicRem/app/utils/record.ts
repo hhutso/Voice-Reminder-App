@@ -51,7 +51,8 @@ export function useRecorder() {
         setRecordingUri(savedUri); // Update state
         console.log("recording saved at: ", savedUri);
         return savedUri;
-      } else {
+      }
+      else {
         console.log("No uri found");
         return null;
       }
