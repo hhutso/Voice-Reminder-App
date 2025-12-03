@@ -33,7 +33,7 @@ export function usePlayback(uri: string | null){
             if (status.didJustFinish){
                 player.seekTo(0);
             }
-            player.volume = 1.0;
+            player.volume = 3.0;
             player.play();
         }
         else{
