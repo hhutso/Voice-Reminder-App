@@ -5,7 +5,6 @@ import { styles } from '../styles/style';
 import {useRecorder} from './utils/record';
 import {usePlayback} from './utils/playhelper';
 import { formatDateTime } from './utils/datehelper';
-// import { NAMEOFFUNC } from './components/editReminder';
 
 //hi
 type Reminder = {
@@ -19,7 +18,7 @@ export default function Index() {
   const { isRecording, recordingUri, startRecording, stopRecording} = useRecorder();
   const [activeUri, setActiveUri] = useState<string | null>(null);
   const [reminders, setReminders] = useState<Reminder[]>([
-    {id: 1, title: 'Test1', date: 2025, audioUri: null},
+    {id: 1, title: 'Test', date: 2025, audioUri: null},
   ]);
   const {play, pause, playing, isLoaded} = usePlayback(activeUri);
 
@@ -55,8 +54,10 @@ export default function Index() {
     }
 
     console.log("playback pressed for uri:", uri);
+    //setActiveUri(uri);
 
     if(activeUri === uri){
+      console.log("activeUri in place")
       if (playing){
         pause();
       }
@@ -66,6 +67,7 @@ export default function Index() {
     }
 
     else {
+      console.log("no active uri in place")
       pause();
       setActiveUri(uri);
       //play();
@@ -134,7 +136,7 @@ export default function Index() {
 
       <FlatList
         style={styles.reminderList}
-        data={reminders}
+        data={reminders.filter(reminder => reminder.id !== 1)}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Swipeable 
@@ -159,7 +161,7 @@ export default function Index() {
                 <Text style={styles.reminderDate}>{formatDateTime(new Date (item.date))}</Text>
               </View>
               <TouchableOpacity style={styles.playButton} onPress={() => handlePlayback(item.audioUri)}>
-                <Text style={styles.playIcon}>{activeUri === item.audioUri && playing ? '| |' : '▶'}</Text>
+                <Text style={styles.playIcon}>{activeUri === item.audioUri && playing ? '||' : '▶'}</Text>
               </TouchableOpacity>
             </View>
           </Swipeable>
