@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { FlatList, Text, TouchableOpacity, View, TextInput, } from 'react-native';
 import { GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
-import { styles } from '../styles/style';
+import { styles as lightMode} from '../styles/lightMode';
+import { styles as darkMode} from '../styles/darkMode';
 import {useRecorder} from './utils/record';
 import {usePlayback} from './utils/playhelper';
 import { formatDateTime } from './utils/datehelper';
@@ -15,6 +16,8 @@ type Reminder = {
   audioUri: string | null;
 };
 
+
+
 export default function Index() {
   const { isRecording, recordingUri, startRecording, stopRecording} = useRecorder();
   const [activeUri, setActiveUri] = useState<string | null>(null);
@@ -23,7 +26,10 @@ export default function Index() {
   ]);
   const {play, pause, playing, isLoaded} = usePlayback(activeUri);
 
- 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const styles = isDarkMode ? darkMode : lightMode;
+
 
   const handleAddReminder = (uri: string) => {
     //add a new reminder
@@ -117,6 +123,7 @@ export default function Index() {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
     <View style={styles.container}>
+
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Welcome to Voice Reminders</Text>
       </View>
