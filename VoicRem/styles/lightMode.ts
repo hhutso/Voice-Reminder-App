@@ -125,5 +125,11 @@ export const styles = StyleSheet.create({
   borderColor: "#ccc",
   paddingVertical: 2,
 },
+  themeToggle: {
+    fontSize: 22,
+    margin: 8,
+    color: colors.primary,
+    fontWeight: '700',
+  },
 
 });

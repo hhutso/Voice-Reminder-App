@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { FlatList, Text, TouchableOpacity, View, TextInput, } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View, TextInput, Switch, } from 'react-native';
 import { GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
-import { styles } from '../styles/style';
+import { styles as lightMode} from '../styles/lightMode';
+import { styles as darkMode} from '../styles/darkMode';
 import {useRecorder} from './utils/record';
 import {usePlayback} from './utils/playhelper';
 import { formatDateTime } from './utils/datehelper';
@@ -14,6 +15,8 @@ type Reminder = {
   audioUri: string | null;
 };
 
+
+
 export default function Index() {
   const { isRecording, recordingUri, startRecording, stopRecording} = useRecorder();
   const [activeUri, setActiveUri] = useState<string | null>(null);
@@ -22,7 +25,9 @@ export default function Index() {
   ]);
   const {play, pause, playing, isLoaded} = usePlayback(activeUri);
 
- 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const styles = isDarkMode ? darkMode : lightMode;
 
   const handleAddReminder = (uri: string) => {
     //add a new reminder
@@ -119,8 +124,16 @@ export default function Index() {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
     <View style={styles.container}>
+      <View style={{ position: 'absolute', marginTop: 25, top: 10, right: 12, zIndex: 10}}>
+        <Switch
+          value={isDarkMode}
+          onValueChange={() => setIsDarkMode(previousState => !previousState)}
+          thumbColor={isDarkMode ? '#f4f3f4' : '#f4f3f4'}
+          trackColor={{ false: '#767577', true: '#555' }}
+        />
+      </View>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Welcome to Voice Reminders</Text>
+        <Text style={styles.headerTitle}>Voice Reminders</Text>
       </View>
 
       <View style={styles.newReminderContainer}>
