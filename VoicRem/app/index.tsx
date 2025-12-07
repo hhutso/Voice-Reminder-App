@@ -62,7 +62,7 @@ export default function Index() {
     //setActiveUri(uri);
 
     if(activeUri === uri){
-      console.log("activeUri in place")
+      console.log("if block")
       if (playing){
         pause();
       }
@@ -72,10 +72,10 @@ export default function Index() {
     }
 
     else {
-      console.log("no active uri in place")
+      console.log("else block place")
       pause();
       setActiveUri(uri);
-      //play();
+      play();
     }
   }
 

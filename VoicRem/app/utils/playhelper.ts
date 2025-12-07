@@ -29,6 +29,7 @@ export function usePlayback(uri: string | null){
     }, [uri, player]);
     
     const play = () => {
+        console.log("isSourceLoaded", isSourceLoaded, "status.isLoaded", status.isLoaded);
         if (isSourceLoaded && status.isLoaded){
             if (status.didJustFinish){
                 player.seekTo(0);
