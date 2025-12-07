@@ -58,3 +58,9 @@ npm install react-native-swipe-list-view
 npx expo install expo-audio
 
 npx expo install react-native-gesture-handler react-native-reanimated
+
+npm install mobx
+npm install mobx-react-lite mobx
+
+npm install @react-native-community/datetimepicker
+

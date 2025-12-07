@@ -6,7 +6,12 @@ import { styles as darkMode} from '../styles/darkMode';
 import {useRecorder} from './utils/record';
 import {usePlayback} from './utils/playhelper';
 import { formatDateTime } from './utils/datehelper';
-// import { NAMEOFFUNC } from './components/editReminder';
+import { Link } from 'expo-router';
+
+import { observer } from "mobx-react-lite";
+import { remindersStore } from "./store/reminderStore";
+
+
 
 //hi
 type Reminder = {
@@ -16,9 +21,8 @@ type Reminder = {
   audioUri: string | null;
 };
 
-
-
-export default function Index() {
+//  TODO:  close the observer parenthesis somewhere down here
+export default observer(function Index() {
   const { isRecording, recordingUri, startRecording, stopRecording} = useRecorder();
   const [activeUri, setActiveUri] = useState<string | null>(null);
   const [reminders, setReminders] = useState<Reminder[]>([
@@ -100,11 +104,19 @@ export default function Index() {
     setEditingId(id);
     setEditingTitle(reminder.title);
   };
-  const renderLeftActions = (id: number) => {
+  const renderLeftActions = (item: Reminder) => {
     return (
-      <RectButton style={styles.editButton} onPress={() => handleEditSwipeReminder(id)}>
-        <Text style={styles.editButtonText}>Edit</Text>
-      </RectButton>
+      <Link
+        href={{
+          pathname: "/components/editReminder",
+          params: { id: item.id.toString() }, // must be string for Expo Router
+        }}
+        asChild
+      >
+        <RectButton style={styles.editButton}>
+          <Text style={styles.editButtonText}>Edit</Text>
+        </RectButton>
+      </Link>
     );
   };
 
@@ -117,7 +129,6 @@ export default function Index() {
     setEditingId(null);
     setEditingTitle("");
   };
-
   
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -152,7 +163,7 @@ export default function Index() {
         renderItem={({ item }) => (
           <Swipeable 
             renderRightActions={() => renderRightActions(item.id)}
-            renderLeftActions={() => renderLeftActions(item.id)}
+            renderLeftActions={() => renderLeftActions(item)}
           >
             <View style={styles.reminderCard}>
               <View>
@@ -162,7 +173,7 @@ export default function Index() {
                     style={styles.reminderTitleInput}
                     value={editingTitle}
                     onChangeText={setEditingTitle}  
-                    autoFocus={true}           // 🔥 pops open keyboard immediately
+                    autoFocus={true}           //  pops open keyboard immediately
                     onSubmitEditing={saveEditedReminder} // press enter to save
                     returnKeyType="done"
                   />
@@ -181,4 +192,4 @@ export default function Index() {
     </View>
     </GestureHandlerRootView>
   );
-}
+});
