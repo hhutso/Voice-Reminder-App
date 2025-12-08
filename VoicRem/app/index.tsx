@@ -147,7 +147,7 @@ export default function Index() {
 
       <FlatList
         style={styles.reminderList}
-        data={reminders}
+        data={reminders.filter(reminder =>reminder.id !== 1)}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Swipeable 
