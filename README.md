@@ -1,13 +1,9 @@
 #Voice-Reminder-App
 
-Make sure you have node.js 
+To run:
+Download Expo Go on mobile Devics
 
-Allow PowerShell Scripts to Run (Temporary)
-    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+In the project folder, run command:
+npx expo start
 
-Install electron
-    npm install electron --save-dev
-
-
-Run the App
-    npm start
+Scan QR code with camera app on IOS
